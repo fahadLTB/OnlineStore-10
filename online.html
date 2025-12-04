@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Online Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .product {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .product h2 {
+            margin-top: 0;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input[type="text"],
+        input[type="email"],
+        select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>My Online Store</h1>
+
+<div class="product">
+    <h2>Product 1</h2>
+    <p>Price: $10</p>
+    <label>
+        Quantity:
+        <input type="number" id="product1_qty" min="0" value="0" />
+    </label>
+</div>
+
+<div class="product">
+    <h2>Product 2</h2>
+    <p>Price: $20</p>
+    <label>
+        Quantity:
+        <input type="number" id="product2_qty" min="0" value="0" />
+    </label>
+</div>
+
+<h2>Checkout</h2>
+<form id="checkoutForm" 
+      action="mailto:your-email@example.com" 
+      method="POST" 
+      enctype="text/plain" 
+      onsubmit="return prepareEmail()">
+    <label>
+        Name:
+        <input type="text" id="name" required />
+    </label>
+    <label>
+        Email:
+        <input type="email" id="email" required />
+    </label>
+    <label>
+        Address:
+        <input type="text" id="address" required />
+    </label>
+    <button type="submit">Send Order via Email</button>
+</form>
+
+<script>
+function prepareEmail() {
+    const product1Qty = parseInt(document.getElementById('product1_qty').value) || 0;
+    const product2Qty = parseInt(document.getElementById('product2_qty').value) || 0;
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const address = document.getElementById('address').value;
+
+    let orderDetails = `Order from: ${name}\nEmail: ${email}\nAddress: ${address}\n\nItems:\n`;
+
+    if (product1Qty > 0) {
+        orderDetails += `Product 1 x ${product1Qty}\n`;
+    }
+    if (product2Qty > 0) {
+        orderDetails += `Product 2 x ${product2Qty}\n`;
+    }
+
+    if (orderDetails === `Order from: ${name}\nEmail: ${email}\nAddress: ${address}\n\nItems:\n`) {
+        alert('Please select at least one product.');
+        return false;
+    }
+
+    // Encode the email content
+    const mailtoLink = `mailto:your-email@example.com?subject=Order%20from%20${encodeURIComponent(name)}&body=${encodeURIComponent(orderDetails)}`;
+    window.location.href = mailtoLink;
+
+    return false; // Prevent actual form submission
+}
+</script>
+
+</body>
+</html>
